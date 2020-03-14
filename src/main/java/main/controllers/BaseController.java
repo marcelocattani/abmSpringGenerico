@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import main.services.IBaseService;
 
+@CrossOrigin  (origins = "*", methods = {RequestMethod.DELETE, RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class BaseController<DTO> {
 	private IBaseService service;
 
@@ -20,14 +22,14 @@ public class BaseController<DTO> {
 		this.service = service;
 	}
 
-	@GetMapping("/")
+	@GetMapping("")	
 	@CrossOrigin(origins = "*")
 	@Transactional
 	public ResponseEntity getAll() {
 		try {
-			return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
+			return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Error.\"}");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error.\"}");
 		}
 	}
 
@@ -36,7 +38,7 @@ public class BaseController<DTO> {
 	@Transactional
 	public ResponseEntity getOne(@PathVariable int id) {
 		try {
-			return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+			return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error.\"}");
 		}
@@ -47,7 +49,7 @@ public class BaseController<DTO> {
 	@Transactional
 	public ResponseEntity post(@RequestBody DTO dto) {
 		try {
-			return ResponseEntity.status(HttpStatus.FOUND).body(service.save(dto));
+			return ResponseEntity.status(HttpStatus.OK).body(service.save(dto));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error.\"}");
 		}
@@ -58,7 +60,7 @@ public class BaseController<DTO> {
 	@Transactional
 	public ResponseEntity put(@PathVariable int id, @RequestBody DTO dto) {
 		try {
-			return ResponseEntity.status(HttpStatus.FOUND).body(service.update(id, dto));
+			return ResponseEntity.status(HttpStatus.OK).body(service.update(id, dto));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error.\"}");
 		}
@@ -69,7 +71,7 @@ public class BaseController<DTO> {
 	@Transactional
 	public ResponseEntity delete(@PathVariable int id) {
 		try {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.delete(id));
+			return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error.\"}");
 		}
