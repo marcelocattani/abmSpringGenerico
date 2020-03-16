@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import main.services.IBaseService;
 
@@ -25,9 +26,9 @@ public class BaseController<DTO> {
 	@GetMapping("")	
 	@CrossOrigin(origins = "*")
 	@Transactional
-	public ResponseEntity getAll() {
+	public ResponseEntity getAll(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value =  "size", defaultValue = "10") int size) {
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+			return ResponseEntity.status(HttpStatus.OK).body(service.findAll(page, size));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error.\"}");
 		}

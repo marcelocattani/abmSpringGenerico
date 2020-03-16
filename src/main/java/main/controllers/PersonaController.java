@@ -11,7 +11,7 @@ import main.services.PersonaService;
 
 @Controller
 @RestController
-@RequestMapping(path = "api/v1/persona")
+@RequestMapping(path = "api/v1/personas")
 public class PersonaController extends BaseController<PersonaDto> {
 
 	private PersonaService personaService;

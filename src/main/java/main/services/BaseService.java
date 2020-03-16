@@ -13,6 +13,11 @@ import main.dtos.BaseDto;
 import main.entities.BaseEntity;
 import main.repositories.PersonaRepository;
 
+//Paginacion
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 public class BaseService<ENTITY extends BaseEntity, DTO extends BaseDto> implements IBaseService<DTO> {
 
 	// Apuntador al repositorio
@@ -33,22 +38,26 @@ public class BaseService<ENTITY extends BaseEntity, DTO extends BaseDto> impleme
 	}
 
 	@Override
-	public List<DTO> findAll() throws Exception {
-		List<ENTITY> entities = this.repository.findAll();
-		List<DTO> dtosExit = new ArrayList<DTO>();
+	public List<DTO> findAll(int page, int size) throws Exception {
+
+		List<DTO> dtos = new ArrayList<DTO>();
 
 		try {
+			Pageable pageable = PageRequest.of(page, size);
+			Page<ENTITY> entities = repository.findAll(pageable);
 
-			for (ENTITY item : entities) {
-				DTO dtoItem = (DTO) this.modelMapper.map(item, dtoClass);
-				dtosExit.add(dtoItem);
+			for (ENTITY item : entities.getContent()) {
+
+				DTO dto = (DTO) this.modelMapper.map(item, dtoClass);
+				dtos.add(dto);
+				
 			}
-
-			return dtosExit;
 
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
+		
+		return dtos;
 	}
 
 	@Override
